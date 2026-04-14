@@ -43,3 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+TODO.md
+.env
+
+# Flutter local config
+.flutter-plugins
+.metadata
+
+# Android local
+android/local.properties
+
+# iOS (kalau nanti pakai)
+ios/Pods/
+ios/.symlinks/
