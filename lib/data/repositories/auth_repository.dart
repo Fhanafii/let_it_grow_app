@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthRepository {
   final SupabaseClient _supabase = Supabase.instance.client;
+  Session? get currentSession => _supabase.auth.currentSession;
 
   Future<AuthResponse> signInWithGoogle() async {
     final webClientId = dotenv.get('GOOGLE_WEB_CLIENT_ID'); // Ambil dari .env
@@ -25,6 +26,24 @@ class AuthRepository {
   }
 
   Future<void> signOut() => _supabase.auth.signOut();
+
+  Future<bool> hasRegisteredDevice() async {
+    final userId = _supabase.auth.currentUser?.id;
+    if(userId == null) return false;
+
+    try {
+      final response = await _supabase
+          .from('device_auth')
+          .select()
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      // Mengembalikan true jika ada data, flase jika null
+      return response != null;
+    } catch(e) {
+      rethrow; // biarkan ViewModel yang menangani error
+    }
+  }
 
   User? get currentUser => _supabase.auth.currentUser;
 
