@@ -7,7 +7,7 @@ import 'features/auth/viewmodel/auth_viewmodel.dart';
 import 'features/plant/viewmodel/plant_viewmodel.dart';
 import 'features/auth/view/login_screen.dart';
 import 'features/plant/view/setup_plant_screen.dart';
-import 'features/plant/view/home_screen.dart'; 
+import 'features/plant/view/home_screen_wrapper.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const AuthGate(),
         '/login': (context) => LoginScreen(),
         '/setup-plant': (context) => const SetupPlantScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => const HomeScreenWrapper(),
       },
     );
   }
