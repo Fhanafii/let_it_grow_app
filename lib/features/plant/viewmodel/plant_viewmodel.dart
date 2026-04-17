@@ -31,6 +31,7 @@ class PlantViewModel extends ChangeNotifier {
     isNavigatingToHome = false;
     notifyListeners();
   }
+
   // Fungsi Generate Kredensial
   Future<void> generateCredentials() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
@@ -52,6 +53,26 @@ class PlantViewModel extends ChangeNotifier {
       debugPrint("Error generate credentials: $e");
     } finally {
       isGenerating = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchExistingCredentials() async {
+    // Hanya fetch jika variabel masih kosong agar tidak boros API call
+    if (mqttUser != null && mqttPass != null) return;
+
+    try {
+      final creds = await _plantRepository.getRegisteredCredentials();
+      if (creds != null) {
+        mqttUser = creds['mqtt_username'];
+        mqttPass = creds['mqtt_password_hash'];
+        notifyListeners();
+      }else{
+        errorMessage = "Anda belum memiliki akun MQTT. Silakan lakukan setup.";
+        notifyListeners();
+      }
+    } catch (e) {
+      errorMessage = e.toString().replaceAll('Exception: ', '');
       notifyListeners();
     }
   }
