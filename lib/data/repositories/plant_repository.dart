@@ -17,6 +17,26 @@ class PlantRepository {
     }
   }
 
+  // Memanggil register mqtt credentials untuk troubleshooting user
+  Future<Map<String, dynamic>?> getRegisteredCredentials() async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null){
+      throw Exception("Akses ditolak: Silakan login dengan Google terlebih dahulu.");
+    }
+
+    try {
+      final response = await _supabase
+          .from('device_auth')
+          .select('mqtt_username, mqtt_password_hash')
+          .eq('user_id', userId)
+          .maybeSingle();
+      
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Mendapatkan data sensor terbaru (Realtime)
   Stream<List<Map<String, dynamic>>> getMoistureStream(String userId) {
     return _supabase
