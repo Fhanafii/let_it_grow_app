@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'installation_guide_screen.dart';
 import 'device_info_screen.dart';
+import 'package:provider/provider.dart';
+import '../../auth/viewmodel/auth_viewmodel.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -64,6 +66,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Masih kosong sesuai permintaan
+                     _showLogoutDialog(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
@@ -130,6 +133,30 @@ class SettingsScreen extends StatelessWidget {
             const Icon(Icons.arrow_forward_ios, size: 18, color: Color(0xFF0A910A)),
           ],
         ),
+      ),
+    );
+  }
+
+  // Tambahkan fungsi helper dialog konfirmasi
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Apakah kamu yakin ingin keluar dari akun?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Batal", style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Tutup dialog
+              context.read<AuthViewModel>().logout(context); // Jalankan logout
+            },
+            child: const Text("Ya, Logout", style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }
