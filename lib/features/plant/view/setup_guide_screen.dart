@@ -22,7 +22,7 @@ class _SetupGuideScreenState extends State<SetupGuideScreen> {
     plantVM.addListener(_onViewModelUpdate);
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      plantVM.listenToFirstConnection();
+      plantVM.listenToFirstConnection(); // screen atau widgets akan terblock jika device belum terkonfigurasi setelah berhasil akan dapat popup dan bisa lanjut ke home screen
     });
   }
 
