@@ -45,6 +45,22 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> logout(BuildContext context) async {
+    try {
+      await _repository.signOut(); // Panggil fungsi signOut di repository
+      if (context.mounted) {
+        // Hapus semua history navigasi dan kembali ke LoginScreen
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal logout: $e')),
+        );
+      }
+    }
+  }
+  
   Future<void> determineInitialRoute(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 800));
     final session = _repository.currentSession;
